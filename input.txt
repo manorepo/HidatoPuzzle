@@ -1,0 +1,2 @@
+#const n = 4.
+initialpos(1,1,3).

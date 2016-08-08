@@ -1,0 +1,29 @@
+%Grid Size of n
+gridsize(1..n).
+
+%possible values.. 1 to n*n.
+values(1..n*n).
+
+%difference between two cells
+nextcell(-1;0;1).
+
+
+% Assign unique index of rows and cols
+1 { p(Row, Col, Value) : values(Value) } 1 :- gridsize(Row), gridsize(Col).
+
+% make sure all the cells have different numbers
+1 { p(Row, Col, Value) : gridsize(Row),gridsize(Col) } 1 :- values(Value).
+
+% Assign the values to the cells as per input file.
+p(Row, Col, Value) :- initialpos(Row, Col, Value).
+
+%
+% check neighbours cells 
+%
+neighbours(Row, Col, Row2, Col2) :- nextcell(A), nextcell(B),Row2 = Row+A,Col2 = Col+B,
+                               Row2 >= 1, Col2 >= 1,Row2 <= gridsize, Col2 <= gridsize,
+                               gridsize(Row), gridsize(Col).
+
+
+% remove the answer set having two cells which has value differnce as 1 and not neighbours.
+:- p(Row, Col, Value+1), p(Row2, Col2, Value), not neighbours(Row, Col, Row2, Col2), values(Value).
